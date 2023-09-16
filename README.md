@@ -15,12 +15,12 @@ Disables forwading and accepts RA prefix.
 
 ## Rebuild image
 
-'''
+```
 cd _image_
 [edit and tune Dockerfile]
 [edit and tune other used scripts]
 make
 make push
-'''
+```
 
 
