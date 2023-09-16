@@ -1,0 +1,74 @@
+#!/bin/bash
+# chkconfig: - 16 84
+# config: /etc/quagga/ospfd.conf
+
+### BEGIN INIT INFO
+# Provides: ospfd
+# Required-Start:    $remote_fs $syslog $network zebra
+# Required-Stop:     $remote_fs $syslog $network zebra
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: OSPF routing engine
+# Description: OSPF routing engine for use with Zebra
+### END INIT INFO
+
+# source function library
+. /lib/lsb/init-functions
+
+# quagga command line options
+. /etc/default/quagga
+
+RETVAL=0
+PROG="ospfd"
+cmd=/usr/sbin/ospfd
+LOCK_FILE=/var/lock/quagga/ospfd
+CONF_FILE=/etc/quagga/ospfd.conf
+
+[ -d /var/lock/quagga ] || mkdir /var/lock/quagga
+[ -d /run/quagga ] || ( mkdir /run/quagga && chown quagga:quagga /run/quagga )
+
+# if the config file doesn't exist, exit immediately
+[ -f "$CONF_FILE" ] || (echo "No config file" && exit 0)
+
+case "$1" in
+  start)
+	if [ `id -u` -ne 0 ]; then
+		echo $"Insufficient privilege" 1>&2
+		exit 4
+	fi
+
+	log_daemon_msg "Starting $PROG" "$PROG"
+	start_daemon $cmd -d $OSPFD_OPTS -f $CONF_FILE
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch $LOCK_FILE
+	log_end_msg $RETVAL
+	;;
+  stop)
+	log_daemon_msg "Shutting down $PROG" "$PROG"
+	killproc -p /run/quagga/$PROG.pid $cmd
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && rm -f $LOCK_FILE /run/quagga/ospfd.*
+	log_end_msg $RETVAL
+	;;
+  restart|reload|force-reload)
+	$0 stop
+	$0 start
+	RETVAL=$?
+	;;
+  condrestart|try-restart)
+	if [ -f $LOCK_FILE ]; then
+		$0 stop
+		$0 start
+	fi
+	RETVAL=$?
+	;;
+  status)
+	status_of_proc -p /run/quagga/$PROG.pid $cmd
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|restart|reload|force-reload|condrestart|try-restart|status}"
+	exit 2
+esac
+
+exit $RETVAL
