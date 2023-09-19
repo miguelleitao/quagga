@@ -1,5 +1,5 @@
 # quagga
-Quagga images
+Building tools for Kathara images based on Quagga.
 
 ## Included quagga images for ISEP lab works
 ### quagga-isep
