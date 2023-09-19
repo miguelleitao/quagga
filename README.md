@@ -1,7 +1,7 @@
 # quagga
 Quagga images
 
-## Included quagga image for ISEP lab works
+## Included quagga images for ISEP lab works
 ### quagga-isep
 Tunned and improved standard quagga router. Includes RIP, OSPF and BGP daemons. 
 
