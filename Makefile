@@ -27,17 +27,16 @@ login:
 	docker login
 
 build-multi-host-isep: build-multi-quagga-isep
-	$(BUILDX) -t ${IMG_HOST-ISEP} --push host-isep
+	$(BUILDX) -t ${IMG_HOST-ISEP}:latest --push host-isep
 
 build-multi-dhcp-isep: build-multi-quagga-isep
-	$(BUILDX) -t ${IMG_DHCP-ISEP} --push dhcp-isep
+	$(BUILDX) -t ${IMG_DHCP-ISEP}:latest --push dhcp-isep
 
 build-multi-quagga-isep:
-	$(BUILDX) -t ${IMG_QUAGGA-ISEP} --push quagga-isep
+	$(BUILDX) -t ${IMG_QUAGGA-ISEP}:latest --push quagga-isep
 
 builderx:
-	docker buildx create --name builderx --use
-	docker buildx inspect --bootstrap
+	docker buildx create --name mybuilder --bootstrap --use
 
 delete-builderx:
 	docker buildx rm builderx		

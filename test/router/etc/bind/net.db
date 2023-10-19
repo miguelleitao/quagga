@@ -1,0 +1,16 @@
+
+$TTL    604800
+
+@       IN SOA nameserver.net.  (
+                2023101801      ; serial
+                        1D      ; refresh
+                        1H      ; retry
+                        1W      ; expire
+                        3H      ; minimum
+        );
+
+@                       NS      nameserver.net.
+
+nameserver      IN      A       192.168.1.1
+                IN      A       192.168.1.1
+br              IN      CNAME   nameserver
