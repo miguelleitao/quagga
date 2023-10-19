@@ -1,0 +1,78 @@
+
+
+************************** PING **************************
+
+
+************************** router **************************
+ok
+
+
+************************** srv **************************
+ok
+
+
+************************** DNS is running? **************************
+
+; <<>> DiG 9.18.19-1~deb12u1-Debian <<>> nameserver.net
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 2381
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 812a836c72666269010000006530f88c51367974797b5267 (good)
+;; QUESTION SECTION:
+;nameserver.net.			IN	A
+
+;; ANSWER SECTION:
+nameserver.net.		604800	IN	A	192.168.1.1
+
+;; Query time: 0 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)
+;; WHEN: Thu Oct 19 09:36:12 UTC 2023
+;; MSG SIZE  rcvd: 87
+
+
+; <<>> DiG 9.18.19-1~deb12u1-Debian <<>> www.google.pt
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 59806
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 4b86cf206ea035ea010000006530f88c9262a494ad16dadd (good)
+;; QUESTION SECTION:
+;www.google.pt.			IN	A
+
+;; ANSWER SECTION:
+www.google.pt.		274	IN	A	142.250.200.67
+
+;; Query time: 54 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)
+;; WHEN: Thu Oct 19 09:36:12 UTC 2023
+;; MSG SIZE  rcvd: 86
+
+************************** DNS reverse is running? **************************
+
+; <<>> DiG 9.18.19-1~deb12u1-Debian <<>> -x 192.168.1.1
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 59860
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 529b1eec600039ee010000006530f88c751f3ab0c259684e (good)
+;; QUESTION SECTION:
+;1.1.168.192.in-addr.arpa.	IN	PTR
+
+;; AUTHORITY SECTION:
+168.192.IN-ADDR.ARPA.	86400	IN	SOA	168.192.IN-ADDR.ARPA. . 0 28800 7200 604800 86400
+
+;; Query time: 10 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)
+;; WHEN: Thu Oct 19 09:36:12 UTC 2023
+;; MSG SIZE  rcvd: 136
+

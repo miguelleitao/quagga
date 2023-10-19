@@ -1,0 +1,43 @@
+{
+    "interfaces": {
+        "lo": {
+            "ip_addresses": [
+                "127.0.0.1/8",
+                "::1/128"
+            ],
+            "state": "UNKNOWN"
+        },
+        "eth0": {
+            "ip_addresses": [
+                "192.168.1.10/24",
+                "fe80::20f3:abff:feee:8015/64"
+            ],
+            "state": "UP"
+        }
+    },
+    "route": [
+        {
+            "dst": "default",
+            "gateway": "192.168.1.1",
+            "dev": "eth0",
+            "flags": []
+        },
+        {
+            "dst": "192.168.1.0/24",
+            "dev": "eth0",
+            "protocol": "kernel",
+            "scope": "link",
+            "prefsrc": "192.168.1.10",
+            "flags": []
+        }
+    ],
+    "listening_ports": [
+        "udp        0      0 0.0.0.0:68              0.0.0.0:*                          "
+    ],
+    "processes": [
+        "/bin/sh -c bash -l",
+        "bash -l",
+        "dhclient eth0",
+        "ps -e -o command"
+    ]
+}

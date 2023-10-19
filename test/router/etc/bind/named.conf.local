@@ -1,0 +1,9 @@
+zone "net" IN {
+        type master;
+        file "/etc/bind/net.db";
+};
+
+zone "1.68.192.in-addr.arpa"  IN {
+  type master;
+  file "/etc/bind/rev.ipv4.db";
+};
