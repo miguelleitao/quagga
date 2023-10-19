@@ -1,4 +1,5 @@
-FROM miguelleitao/quagga-isep
+ARG BASE
+FROM $BASE
 ADD ./init.version /init.version
 RUN mkdir -p opt; cd opt; git clone https://github.com/miguelleitao/ratools.git; \
 	cd ratools/src; make ; make install-sysv ; cd ../..; rm -rf ratools

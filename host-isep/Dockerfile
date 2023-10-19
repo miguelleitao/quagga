@@ -1,4 +1,5 @@
-FROM miguelleitao/quagga-isep
+ARG BASE
+FROM $BASE
 ADD ./init.version /init.version
 ADD ./99-sysctl.conf /etc/sysctl.d/99-sysctl.conf
 ADD ./init-host.sh /etc/profile.d/init-host.sh

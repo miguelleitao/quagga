@@ -13,13 +13,11 @@
 
 BUILDX=docker buildx build --platform linux/amd64,linux/arm64
 
-# IMG_QUAGGA-ISEP=miguelleitao/quagga-isep
-# IMG_HOST-ISEP=miguelleitao/host-isep
-# IMG_DHCP-ISEP=miguelleitao/dhcp-isep
+OWNER = jcboliveira
 
-IMG_QUAGGA-ISEP=jcboliveira/quagga-isep1
-IMG_HOST-ISEP=jcboliveira/host-isep1
-IMG_DHCP-ISEP=jcboliveira/dhcp-isep1
+IMG_QUAGGA-ISEP=${OWNER}/quagga-isep
+IMG_HOST-ISEP=${OWNER}/host-isep
+IMG_DHCP-ISEP=${OWNER}/dhcp-isep
 
 IMG:=${IMG_QUAGGA-ISEP}:$(shell date +'%Y%m%d%H%M')
 
@@ -27,16 +25,16 @@ login:
 	docker login
 
 build-multi-host-isep: build-multi-quagga-isep
-	$(BUILDX) -t ${IMG_HOST-ISEP}:latest --push host-isep
+	$(BUILDX) -t ${IMG_HOST-ISEP}:latest --push --build-arg BASE=${IMG_QUAGGA-ISEP} host-isep 
 
 build-multi-dhcp-isep: build-multi-quagga-isep
-	$(BUILDX) -t ${IMG_DHCP-ISEP}:latest --push dhcp-isep
+	$(BUILDX) -t ${IMG_DHCP-ISEP}:latest --push --build-arg BASE=${IMG_QUAGGA-ISEP} dhcp-isep 
 
 build-multi-quagga-isep:
 	$(BUILDX) -t ${IMG_QUAGGA-ISEP}:latest --push quagga-isep
 
 builderx:
-	docker buildx create --name mybuilder --bootstrap --use
+	docker buildx create --name builderx --bootstrap --use
 
 delete-builderx:
 	docker buildx rm builderx		

@@ -1,0 +1,21 @@
+
+echo
+echo
+echo "************************** PING **************************"
+echo
+echo
+echo "************************** router **************************"
+ping -c 1 -W 1 -q 192.168.1.1 > /dev/null && echo ok || echo error
+echo
+echo
+echo "************************** srv **************************"
+ping -c 1 -W 1 -q 192.168.1.2 > /dev/null && echo ok || echo error
+
+echo
+echo
+echo "************************** DNS is running? **************************"
+dig  nameserver.net
+dig www.google.pt
+
+echo "************************** DNS reverse is running? **************************"
+dig -x 192.168.1.1

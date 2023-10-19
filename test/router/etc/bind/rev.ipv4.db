@@ -1,16 +1,12 @@
-; rev.maracas_af.db
-; Data file for reverse DNS.
-; Address to hostname translation.
-;
 $TTL   43200
-@ IN   SOA   nameserver.net. (
+@ IN   SOA   nameserver.net.  _mec_.isep.ipp.pt. (
              2009111001      ; serial
              3600            ; refresh
              1800            ; retry
              1209600         ; expire
              43200           ; default_ttl
 )
-@ IN   NS    nameserver.ola.net.
+@ IN   NS    nameserver.net.
 
 ; Hosts for Networks A and F
 1.1.168.192.in-addr.arpa.      IN   PTR    nameserver.net.

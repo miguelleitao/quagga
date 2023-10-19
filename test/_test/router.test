@@ -1,0 +1,11 @@
+echo
+echo
+echo "************************** PING **************************"
+echo
+echo
+echo "************************** srv **************************"
+ping -c 1 -W 1 -q 192.168.1.2 > /dev/null && echo ok || echo erro
+echo
+echo
+echo "************************** PC **************************"
+ping -c 1 -W 1 -q 192.168.1.10 > /dev/null && echo ok || echo erro

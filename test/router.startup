@@ -1,7 +1,6 @@
-## eth0 ETH1 IP fixo
 ifconfig eth0 192.168.1.1/24
+iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
 
-# Arranque do dameon do DHCP e DNS
 /etc/init.d/dhcpd start 
 /etc/init.d/bind start
 

@@ -1,15 +1,8 @@
-// named.conf.local
-// ISEP, Out 2023
-//
-// Local Zones
-//
-
 zone "net" IN {
         type master;
         file "/etc/bind/net.db";
 };
 
-// Reverse DNS resolution for Subnets A, F
 zone "1.68.192.in-addr.arpa"  IN {
   type master;
   file "/etc/bind/rev.ipv4.db";
