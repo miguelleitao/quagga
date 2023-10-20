@@ -5,14 +5,29 @@
 # José Oliveira, 2023
 #
 
-default: build
+# Owner of destination docker repo.
+# Only important for push.
 
-include ../Makefile
+OWNER = miguelleitao
+IMG_NAME=$(shell basename `pwd`)
+
+IMG_BASE=${OWNER}/${IMG_NAME}
+IMG:=${IMG_BASE}:$(shell date +'%Y%m%d%H%M')
+
+BUILDX=docker buildx build --platform linux/amd64,linux/arm64
+
+default: build
 
 build_single_platform:
 	echo ${IMG} >init.version
 	docker build -t ${IMG} .
 
+build:
+	@echo "Multiplatform building ${IMG}"
+	@echo ${IMG} >init.version
+	$(BUILDX) -t ${IMG_BASE}:latest --push .
+	@echo "Done."
+	
 push_sigle_platform:	build_single_platform
 	docker tag ${IMG} ${IMG_BASE}:latest
 	docker push ${IMG_BASE}:latest

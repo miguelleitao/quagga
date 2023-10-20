@@ -13,13 +13,26 @@
 
 BUILDX=docker buildx build --platform linux/amd64,linux/arm64
 
-OWNER = jcboliveira
+OWNER = miguelleitao
+IMG_NAME=$(shell basename `pwd`)
+IMG_BASE=${OWNER}/${IMG_NAME}
 
-IMG_QUAGGA-ISEP=${OWNER}/quagga-isep
-IMG_HOST-ISEP=${OWNER}/host-isep
-IMG_DHCP-ISEP=${OWNER}/dhcp-isep
 
-IMG:=${IMG_QUAGGA-ISEP}:$(shell date +'%Y%m%d%H%M')
+#IMG_QUAGGA-ISEP=${OWNER}/quagga-isep
+#IMG_HOST-ISEP=${OWNER}/host-isep
+#IMG_DHCP-ISEP=${OWNER}/dhcp-isep
+
+#IMG:=${IMG_QUAGGA-ISEP}:$(shell date +'%Y%m%d%H%M')
+
+IMG_TARGETS=quagga-isep host-isep dhcp-isep
+
+.PHONY:$(IMG_TARGETS)
+
+all: $(IMG_TARGETS)
+
+$(IMG_TARGETS):
+	make -C $@
+
 
 login:
 	docker login
@@ -32,6 +45,13 @@ build-multi-dhcp-isep: build-multi-quagga-isep
 
 build-multi-quagga-isep:
 	$(BUILDX) -t ${IMG_QUAGGA-ISEP}:latest --push quagga-isep
+
+build:
+	@echo "Multiplatform building ${IMG}"
+	@echo ${IMG} >init.version
+	$(BUILDX) -t ${IMG_BASE}:latest --push .
+	@echo "Done."
+
 
 builderx:
 	docker buildx create --name builderx --bootstrap --use
