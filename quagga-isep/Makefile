@@ -9,20 +9,4 @@ default: build
 
 include ../Makefile
 
-build_single_platform:
-	echo ${IMG} >init.version
-	docker build -t ${IMG} .
-
-push_sigle_platform:	build_single_platform
-	docker tag ${IMG} ${IMG_BASE}:latest
-	docker push ${IMG_BASE}:latest
-
-login:
-	docker login
-
-builderx:
-	docker buildx create --name builderx --bootstrap --use
-
-delete-builderx:
-	docker buildx rm builderx
 

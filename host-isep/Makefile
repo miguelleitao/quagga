@@ -1,18 +1,14 @@
 #
-# Makefile for host-isep docker image
+# Makefile for quagga-isep docker image
 #
-# Miguel Leitao, 2022
+# Miguel Leitão, 2022
+# José Oliveira, 2023
 #
 
-IMG_BASE=miguelleitao/host-isep
-IMG:=${IMG_BASE}:$(shell date +'%Y%m%d%H%M')
-build:
-	echo ${IMG} >init.version
-	docker build --network=host -t ${IMG} .
+default: build
 
-push:	build
-	docker tag ${IMG} ${IMG_BASE}:latest
-	docker push ${IMG_BASE}:latest
+IMG_BASE=miguelleitao/quagga-isep
 
-login:
-	docker login
+include ../Makefile
+
+

@@ -1,20 +1,14 @@
 #
-# Makefile for dhcp-isep docker image
+# Makefile for quagga-isep docker image
 #
-# Miguel Leitao, 2022
+# Miguel Leitão, 2022
+# José Oliveira, 2023
 #
 
+default: build
 
-IMG_BASE=miguelleitao/quagga-isep:latest
-IMG_NEW=miguelleitao/dhcp-isep
-IMG:=${IMG_NEW}:$(shell date +'%Y%m%d%H%M')
-build:
-	echo ${IMG} >init.version
-	docker build -t ${IMG} .
+IMG_BASE=miguelleitao/quagga-isep
 
-push:	build
-	docker tag ${IMG} ${IMG_NEW}:latest
-	docker push ${IMG_NEW}:latest
+include ../Makefile
 
-login:
-	docker login
+
