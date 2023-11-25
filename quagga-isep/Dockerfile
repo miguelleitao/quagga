@@ -15,4 +15,6 @@ ADD ./ospf6d.init /etc/init.d/ospf6d
 RUN systemctl enable init-isep.service
 RUN rm /sbin/init; ln -s /usr/local/sbin/init-isep.sh /sbin/init
 RUN ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/
+RUN ln -s /var/state/quagga /var/run
+RUN sed -i 's/--oknodo\s--exec\s"$D_PATH\/$1"/--oknodo --name "$1"/' /etc/init.d/quagga
 ENTRYPOINT bash -l
