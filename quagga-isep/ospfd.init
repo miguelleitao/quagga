@@ -16,13 +16,14 @@
 . /lib/lsb/init-functions
 
 # quagga command line options
-. /etc/default/quagga
+[ -f /etc/default/quagga ] && . /etc/default/quagga
 
 RETVAL=0
 PROG="ospfd"
 cmd=/usr/sbin/ospfd
 LOCK_FILE=/var/lock/quagga/ospfd
 CONF_FILE=/etc/quagga/ospfd.conf
+PID_FILE=/run/quagga/ospfd.conf
 
 [ -d /var/lock/quagga ] || mkdir /var/lock/quagga
 [ -d /run/quagga ] || ( mkdir /run/quagga && chown quagga:quagga /run/quagga )
@@ -38,7 +39,8 @@ case "$1" in
 	fi
 
 	log_daemon_msg "Starting $PROG" "$PROG"
-	start_daemon $cmd -d $OSPFD_OPTS -f $CONF_FILE
+	#start_daemon $cmd -d $OSPFD_OPTS -f $CONF_FILE
+	$cmd -f $CONF_FILE -i $PID_FILE &
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch $LOCK_FILE
 	log_end_msg $RETVAL

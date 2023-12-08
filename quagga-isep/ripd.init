@@ -16,7 +16,7 @@
 . /lib/lsb/init-functions
 
 # quagga command line options
-#. /etc/default/quagga
+[ -f /etc/default/quagga ] && . /etc/default/quagga
 
 RETVAL=0
 PROG="ripd"

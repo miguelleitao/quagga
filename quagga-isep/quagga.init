@@ -78,7 +78,6 @@ start()
 {
         echo -n " $1"
         if ! check_daemon $1; then return; fi
-
         if [ "$1" = "watchquagga" ]; then
             start-stop-daemon \
                 --oknodo \
