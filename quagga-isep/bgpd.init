@@ -23,7 +23,7 @@ PROG="bgpd"
 cmd=/usr/sbin/bgpd
 LOCK_FILE=/var/lock/quagga/bgpd
 CONF_FILE=/etc/quagga/bgpd.conf
-PID_FILE=/run/quagga/bgpd.conf
+PID_FILE=/run/quagga/bgpd.pid
 
 [ -d /var/lock/quagga ] || mkdir /var/lock/quagga
 [ -d /run/quagga ] || ( mkdir /run/quagga && chown quagga:quagga /run/quagga )
