@@ -23,7 +23,7 @@ PROG="ospfd"
 cmd=/usr/sbin/ospfd
 LOCK_FILE=/var/lock/quagga/ospfd
 CONF_FILE=/etc/quagga/ospfd.conf
-PID_FILE=/run/quagga/ospfd.conf
+PID_FILE=/run/quagga/ospfd.pid
 
 [ -d /var/lock/quagga ] || mkdir /var/lock/quagga
 [ -d /run/quagga ] || ( mkdir /run/quagga && chown quagga:quagga /run/quagga )
