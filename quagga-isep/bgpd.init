@@ -37,7 +37,6 @@ case "$1" in
 		echo $"Insufficient privilege" 1>&2
 		exit 4
 	fi
-
 	log_daemon_msg "Starting $PROG" "$PROG"
 	#start_daemon -- $cmd -d $BGPD_OPTS -f $CONF_FILE
 	$cmd -f $CONF_FILE -i $PID_FILE &
@@ -47,7 +46,7 @@ case "$1" in
 	;;
   stop)
 	log_daemon_msg "Shutting down $PROG" "$PROG"
-	killproc -p /run/quagga/$PROG.pid $cmd
+	killproc -p $PID_FILE $cmd
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && rm -f $LOCK_FILE /run/quagga/bgpd.*
 	log_end_msg $RETVAL
@@ -65,7 +64,7 @@ case "$1" in
 	RETVAL=$?
 	;;
   status)
-	status_of_proc -p /run/quagga/$PROG.pid $cmd
+	status_of_proc -p $PID_FILE $cmd
 	RETVAL=$?
 	;;
   *)
