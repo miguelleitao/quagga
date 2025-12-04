@@ -13,16 +13,12 @@
 
 BUILDX=docker buildx build --platform linux/amd64,linux/arm64
 
-OWNER:=$(shell  docker info |grep Username |cut -d':' -f2)
+OWNER=$(shell  docker info info 2>/dev/null |grep Username |cut -d':' -f2)
 
 IMG_NAME=$(shell basename `pwd`)
 IMG_REPO=${OWNER}/${IMG_NAME}
 IMG_TAG:=${IMG_REPO}:$(shell date +'%Y%m%d%H%M')
 IMG_BASE?=kathara/quagga
-
-#IMG_QUAGGA-ISEP=${OWNER}/quagga-isep
-#IMG_HOST-ISEP=${OWNER}/host-isep
-#IMG_DHCP-ISEP=${OWNER}/dhcp-isep
 
 IMG_TARGETS=quagga-isep host-isep dhcp-isep
 
@@ -34,6 +30,14 @@ default: help
 help:
 	@echo "Available targets:"
 	@LC_ALL=C $(MAKE) -pRrq -f $(firstword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/(^|\n)# Files(\n|$$)/,/(^|\n)# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | grep -E -v -e '^[^[:alnum:]]' -e '^$@$$'
+
+
+# Push to GitHub
+push:
+	@echo "Pushing to GitHub"
+	git add .
+	git commit -m "update"
+	git push
 
 # Build all target images
 all: $(IMG_TARGETS)
