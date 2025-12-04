@@ -23,6 +23,7 @@ PROG="ripngd"
 cmd=/usr/sbin/ripngd
 LOCK_FILE=/var/lock/quagga/ripngd
 CONF_FILE=/etc/quagga/ripngd.conf
+PID_FILE=/run/quagga/${PROG}.pid
 
 [ -d /var/lock/quagga ] || mkdir /var/lock/quagga
 [ -d /run/quagga ] || ( mkdir /run/quagga && chown quagga:quagga /run/quagga )
@@ -37,8 +38,8 @@ case "$1" in
 		exit 4
 	fi
 
-	log_daemon_msg "Starting $PROG" "$PROG"
-	start_daemon $cmd -d $RIPNGD_OPTS -f $CONF_FILE
+	log_daemon_msg "Starting $PROG" "$PROG"	
+	start_daemon $cmd -d -f $CONF_FILE start_daemon -i $PID_FILE $RIPNGD_OPTS
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch $LOCK_FILE
 	log_end_msg $RETVAL
