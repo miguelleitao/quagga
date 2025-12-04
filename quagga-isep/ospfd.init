@@ -23,7 +23,7 @@ PROG="ospfd"
 cmd=/usr/sbin/ospfd
 LOCK_FILE=/var/lock/quagga/ospfd
 CONF_FILE=/etc/quagga/ospfd.conf
-PID_FILE=/run/quagga/ospfd.conf
+PID_FILE=/run/quagga/ospfd.pid
 
 [ -d /var/lock/quagga ] || mkdir /var/lock/quagga
 [ -d /run/quagga ] || ( mkdir /run/quagga && chown quagga:quagga /run/quagga )
@@ -49,7 +49,7 @@ case "$1" in
 	log_daemon_msg "Shutting down $PROG" "$PROG"
 	killproc -p /run/quagga/$PROG.pid $cmd
 	RETVAL=$?
-	[ $RETVAL -eq 0 ] && rm -f $LOCK_FILE /run/quagga/ospfd.*
+	[ $RETVAL -eq 0 ] && rm -f $LOCK_FILE && rm -f /run/quagga/ospfd.*
 	log_end_msg $RETVAL
 	;;
   restart|reload|force-reload)

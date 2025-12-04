@@ -47,7 +47,7 @@ case "$1" in
 	log_daemon_msg "Shutting down $PROG" "$PROG"
 	killproc -p /run/quagga/$PROG.pid $cmd
 	RETVAL=$?
-	[ $RETVAL -eq 0 ] && rm -f $LOCK_FILE
+	[ $RETVAL -eq 0 ] && rm -f $LOCK_FILE  rm -f /run/quagga/ospf6d.*
 	log_end_msg $RETVAL
 	;;
   restart|reload|force-reload)
