@@ -1,25 +1,55 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -e 
+
+date >init.log
+
 # Nome da bridge
 BRIDGE=br0
-ETH0=eth0
-ETH1=eth1
+STABLE_ROUNDS=5
 
-# criar bridge (kernel nativo)
-ip link add name $BRIDGE type bridge  # opcional; se não tiver iproute2 pode usar: brctl addbr br0
-brctl addbr $BRIDGE
+echo "[bridge] A aguardar interfaces do Kathara..." >>init.log
 
-# adicionar interfaces
-brctl addif $BRIDGE $ETH0
-brctl addif $BRIDGE $ETH1
+last_ifaces=""
+stable_count=0
 
-# ativa bridge e interfaces
-brctl stp br0 off          # opcional, desliga spanning tree
-echo 1 > /sys/class/net/eth0/flags
-echo 1 > /sys/class/net/eth1/flags
-echo 1 > /sys/class/net/br0/flags
+while true; do
+    # lista interfaces eth*
+    IFACES=$(ls /sys/class/net | grep '^eth[0-9]\+$' | sort | tr '\n' ' ')
 
-# mantém container vivo
-tail -f /dev/null &
+    if [ "$IFACES" != "$last_ifaces" ]; then
+        echo "  [bridge] Interfaces detetadas: $IFACES" >>init.log
+        last_ifaces="$IFACES"
+	stable_count=0
+        stable_since=$(date +%s.%N)
+    else
+        stable_count=$((stable_count + 1))
+    fi
 
+    if [ "$stable_count" -ge "$STABLE_ROUNDS" ]; then
+        break
+    fi
+    sleep 0.2
+done
+
+echo "[REP] Interfaces detetadas: $IFACES" >>init.log
+
+sleep 0.2
+# Create bridge 
+ip link add name $BRIDGE type bridge stp_state 0
+
+# Liga todas as eth* à bridge
+for IF in $IFACES; do
+    echo "[REP] Ligando $IF à bridge $BRIDGE" >>init.log
+    ip link set "$IF" master "$BRIDGE"
+    ip link set "$IF" up
+done
+
+ip link set $BRIDGE up
+
+echo "[REP] Bridge $BRIDGE ativa com interfaces: $IFACES" >>init.log
+
+sleep 5
 # fecha terminal
-exit 0
+exec tail -f /dev/null 
+#exit
+#exec /bin/bash

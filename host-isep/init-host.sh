@@ -6,5 +6,5 @@ sysctl -w net.ipv6.conf.all.router_solicitations=50
 sysctl -w net.ipv6.conf.all.router_solicitation_interval=1
 sysctl -w net.ipv6.conf.all.router_solicitation_delay=1
 fi
-
+date >/init.log
 
