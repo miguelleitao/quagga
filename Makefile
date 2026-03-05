@@ -20,7 +20,7 @@ IMG_REPO=${OWNER}/${IMG_NAME}
 IMG_TAG:=${IMG_REPO}:$(shell date +'%Y%m%d%H%M')
 IMG_BASE?=kathara/quagga
 
-IMG_TARGETS=quagga-isep host-isep dhcp-isep bridge-isep
+IMG_TARGETS=quagga-isep host-isep dhcp-isep bridge-isep iot-device
 
 .PHONY:$(IMG_TARGETS)
 
