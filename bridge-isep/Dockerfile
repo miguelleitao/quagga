@@ -10,15 +10,10 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends bridge-utils iproute2 tcpdump && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copia o script init.sh para dentro do container
-COPY bridge-init.sh /bridge-init.sh
-RUN chmod +x /bridge-init.sh
-
-COPY down /usr/local/bin/down
-RUN chmod +x /usr/local/bin/down
-
-COPY up /usr/local/bin/up
-RUN chmod +x /usr/local/bin/up
+# Copia scripts para dentro do container
+COPY --chmod=755 bridge-init.sh /bridge-init.sh
+COPY --chmod=755 down /usr/local/bin/down
+COPY --chmod=755 up /usr/local/bin/up
 
 # Comando padrão do container: executa init.sh
 CMD ["/bridge-init.sh"]
