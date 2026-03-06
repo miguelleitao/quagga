@@ -7,7 +7,6 @@ RUN apt-get install -y python3-dev python3-pytest python3-sphinx libjson-c-dev
 RUN apt-get install -y libelf-dev libreadline-dev cmake libcap-dev bison flex 
 RUN apt-get install -y pkg-config texinfo gdb libgrpc-dev python3-grpc-tools
 RUN apt-get install -y libpcre2-dev 
-#pcre2-devel.
 RUN git clone https://github.com/CESNET/libyang.git ;\
    cd libyang ;\
    git checkout v3.13.6 ;\
@@ -20,9 +19,9 @@ RUN addgroup --system --gid 85 frrvty
 RUN adduser --system --ingroup frr --home /var/opt/frr/ \
    --gecos "FRR suite" --shell /bin/false frr
 RUN usermod -a -G frrvty frr
-RUN git clone https://github.com/miguelleitao/frr.git frr ;\
+RUN git clone https://github.com/miguelleitao/frr.git frr &&\
    cd frr ;\
-   ./bootstrap.sh ;\
+   ./bootstrap.sh &&\
    ./configure \
     --sysconfdir=/etc \
     --localstatedir=/var \
@@ -35,24 +34,24 @@ RUN git clone https://github.com/miguelleitao/frr.git frr ;\
     --enable-logfile-mask=0640 \
     --enable-fpm \
     --with-pkg-git-version \
-    --with-pkg-extra-version=-isep ;\
-   make ;\
-   make check ;\
-   make install
-
+    --with-pkg-extra-version=-isep &&\
+   make -j4 &&\
+   make check &&\
+   make install &&\
+   mkdir -p /usr/lib/frr /etc/frr /var/log/frr &&\
+   chown frr:frr /var/log/frr
+   ln -s /usr/lib/frr/frrinit.sh /usr/bin/frrinit.sh &&\
+   ln -s /usr/local/lib/libfrr.so.0 /usr/lib/libfrr.so.0
+# Overwrite adapted frrinit.sh
+COPY --chown=frr:frr frrinit.sh /usr/lib/frr/frrinit.sh
+COPY --chown=frr:frr daemons  /etc/frr/
+#
 COPY ./init-isep.sh /usr/local/sbin/init-isep.sh
 ADD ./init-isep.service /etc/systemd/system/init-isep.service
 ADD ./init-isep.sh /etc/profile.d/init-isep.sh
 ADD ./init.version /init.version
 ADD ./apache2ctl /usr/sbin/apache2ctl
 RUN cd /etc/init.d ; rm -f quagga ripd zebra ospfd bgpd ripng ospf6d
-COPY ./quagga.init /etc/init.d/quagga
-ADD ./ripd.init /etc/init.d/ripd
-ADD ./zebra.init /etc/init.d/zebra
-ADD ./ospfd.init /etc/init.d/ospfd
-ADD ./bgpd.init /etc/init.d/bgpd
-ADD ./ripngd.init /etc/init.d/ripngd
-ADD ./ospf6d.init /etc/init.d/ospf6d
 RUN systemctl enable init-isep.service
 RUN rm /sbin/init; ln -s /usr/local/sbin/init-isep.sh /sbin/init
 RUN ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/

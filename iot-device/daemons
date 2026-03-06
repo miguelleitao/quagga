@@ -1,4 +1,8 @@
 zebra=yes
-ripd=yes
-ospfd=yes
+ripngd=yes
+watchfrr=no
+staticd=no
+mgmtd=no
+
+MAX_FDS=10000
 
