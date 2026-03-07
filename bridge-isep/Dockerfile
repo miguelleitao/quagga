@@ -7,9 +7,10 @@ FROM kathara/base
 #RUN apk add --no-cache ebtables tcpdump bash
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends bridge-utils iproute2 tcpdump && \
+    apt-get install -y --no-install-recommends iproute2 tcpdump && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# bridge-utils
 # Copia scripts para dentro do container
 COPY --chmod=755 bridge-init.sh /bridge-init.sh
 COPY --chmod=755 down /usr/local/bin/down
