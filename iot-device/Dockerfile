@@ -1,4 +1,8 @@
 FROM kathara/quagga AS build
+LABEL org.opencontainers.image.authors="Miguel Leitão"
+LABEL org.opencontainers.image.description="FRR router image"
+LABEL org.opencontainers.image.version="1.0"
+LABEL org.opencontainers.image.source="https://github.com/miguelleitao/quagga"
 RUN apt-get update && \
     apt-get purge -y quagga && \
     apt-get install -y git autoconf automake libtool make \
@@ -16,8 +20,8 @@ RUN git clone https://github.com/CESNET/libyang.git ;\
    make -j$(nproc) &&\
    make install &&\
    cd .. && rm -rf libyang
-RUN addgroup --system --gid 92 frr
-RUN addgroup --system --gid 85 frrvty
+RUN addgroup --system --gid 92 frr && \
+    addgroup --system --gid 85 frrvty
 RUN adduser --system --ingroup frr --home /var/opt/frr/ \
    --gecos "FRR suite" --shell /bin/false frr
 RUN usermod -a -G frrvty frr
@@ -39,7 +43,11 @@ RUN git clone https://github.com/miguelleitao/frr.git frr &&\
     --with-pkg-extra-version=-isep &&\
    make -j$(nproc) && make install-strip &&\
    cd .. && rm -rf frr
+# Target build
 FROM kathara/base
+RUN apt-get update && \
+    apt-get purge -y quagga && \
+    rm -rf /var/lib/apt/lists/*
 RUN addgroup --system --gid 92 frr && \
   addgroup --system --gid 85 frrvty && \
   adduser --system --ingroup frr --home /var/opt/frr/ \
@@ -48,9 +56,20 @@ RUN addgroup --system --gid 92 frr && \
 RUN mkdir -p /usr/lib/frr /etc/frr /var/log/frr &&\
     chown frr:frr /var/log/frr 
 COPY --from=build /usr/lib/frr /usr/lib/frr
-COPY --from=build /usr/lib/libfrr.so* /usr/lib/
-#    ln -s /usr/lib/frr/frrinit.sh /usr/bin/frrinit.sh &&\
-#    ln -s /usr/local/lib/libfrr.so.0 /usr/lib/libfrr.so.0
+# Install libyang
+COPY --from=build /usr/lib/*/libyang.so.3.9.14 /usr/local/lib/
+#install frr libs
+COPY --from=build /usr/local/lib/libfrr.so.*.*.* /usr/local/lib/
+COPY --from=build /usr/local/lib/libmlag_pb.so.*.*.* /usr/local/lib/
+COPY --from=build /usr/local/lib/libmgmt_be_nb.so.*.*.* /usr/local/lib/
+COPY --from=build /usr/local/lib/libfrrospfapiclient.so.*.*.* /usr/local/lib/
+COPY --from=build /usr/local/lib/libfrrfpm_pb.so.*.*.* /usr/local/lib/
+COPY --from=build /usr/local/lib/libfrrcares.so.*.*.* /usr/local/lib/
+COPY --from=build /usr/local/lib/libfrr_pb.so.*.*.* /usr/local/lib/
+COPY --from=build /usr/local/lib/frr /usr/local/lib/frr
+COPY --from=build /usr/local/bin/vtysh /usr/local/bin/
+RUN ldconfig && ln -s /usr/lib/frr/frrinit.sh /usr/local/bin/frrinit.sh &&\
+    ln -s /usr/local/lib/libfrr.so.0 /usr/lib/libfrr.so.0
 # Overwrite adapted frrinit.sh
 COPY --chown=frr:frr frrinit.sh /usr/lib/frr/frrinit.sh
 COPY --chown=frr:frr daemons /etc/frr/
