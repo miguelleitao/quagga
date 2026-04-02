@@ -1,0 +1,7 @@
+ifconfig eth0 10.0.1.1/24
+ifconfig eth1 10.0.2.1/24
+openssl req -x509 -newkey rsa:2048 \
+    -keyout /etc/dnsdist/key.pem -out /etc/dnsdist/cert.pem \
+    -days 120 -nodes \
+    -subj "/CN=doh.local"
+

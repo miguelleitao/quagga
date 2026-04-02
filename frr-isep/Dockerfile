@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.description="FRR router image"
 LABEL org.opencontainers.image.version="1.0"
 LABEL org.opencontainers.image.source="https://github.com/miguelleitao/quagga"
 RUN apt-get update && \
-   apt-get install -y dnsdist && \
+   apt-get install -y dnsdist knot-dnsutils && \
    rm -rf /var/lib/apt/lists/*
 #
 COPY init-isep.sh /usr/local/sbin/init-isep.sh
