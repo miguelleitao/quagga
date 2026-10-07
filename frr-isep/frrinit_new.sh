@@ -17,8 +17,9 @@
 #
 
 export LD_LIBRARY_PATH=/usr/local/lib
-
-ulimit -n 100000
+chown frr:frr /var/log/frr
+ulimit -n 1000
+chmod 755 /usr/lib/frr/ripngd
 
 if [ -r "/lib/lsb/init-functions" ]; then
 	. /lib/lsb/init-functions

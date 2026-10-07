@@ -1,0 +1,5 @@
+#!/bin/sh
+ebtables -P FORWARD DROP
+echo "Bridge '${HOSTNAME}' is DOWN"
+
+

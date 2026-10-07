@@ -18,9 +18,9 @@ OWNER=$(shell docker info 2>/dev/null |grep Username |cut -d':' -f2)
 IMG_NAME=$(shell basename `pwd`)
 IMG_REPO=${OWNER}/${IMG_NAME}
 IMG_TAG:=${IMG_REPO}:$(shell date +'%Y%m%d%H%M')
-IMG_BASE?=kathara/quagga
+IMG_BASE?=kathara/frr
 
-IMG_TARGETS=quagga-isep host-isep dhcp-isep bridge-isep iot-device stun-isep frr-isep
+IMG_TARGETS=quagga-isep host-isep dhcp-isep bridge-isep iot-device stun-isep frr-isep server
 
 .PHONY:$(IMG_TARGETS)
 

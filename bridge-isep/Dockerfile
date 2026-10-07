@@ -13,8 +13,9 @@ RUN apt-get update && \
 # bridge-utils
 # Copia scripts para dentro do container
 COPY --chmod=755 bridge-init.sh /bridge-init.sh
-COPY --chmod=755 down /usr/local/bin/down
-COPY --chmod=755 up /usr/local/bin/up
+COPY --chmod=755 bridge_down /usr/local/bin/bridge_down
+COPY --chmod=755 bridge_up /usr/local/bin/bridge_up
+COPY --chmod=755 set_link /usr/local/bin/set_link
 
 # Comando padrão do container: executa init.sh
 CMD ["/bridge-init.sh"]

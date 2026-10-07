@@ -15,7 +15,7 @@ link_up() {
   ${EBTABLES} -A ${CHAIN} -i $2 -o $1 -j ACCEPT
 }
 link_show() {
-  ${EBTABLES} -L ${CHAIN} -i $1 -o $2 
+  ${EBTABLES} -L ${CHAIN} |grep "\-. $1\ " |grep "\-. $0\ "
   ${EBTABLES} -L ${CHAIN} -i $2 -o $1 
 }
 

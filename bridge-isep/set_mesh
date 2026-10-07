@@ -1,0 +1,112 @@
+
+#!/bin/sh
+EBTABLES=ebtables
+CHAIN=FORWARD
+usage() {
+  echo "# $1v0.91"
+  echo "Usage: $1 node1 node2 [up|down] ";
+  exit
+}
+link_down() {
+  ${EBTABLES} -D ${CHAIN} -i eth$1 -o eth$2
+  ${EBTABLES} -D ${CHAIN} -i eth$2 -o eth$1
+}
+link_up() {
+  ${EBTABLES} -A ${CHAIN} -i eth$1 -o eth$2 -j ACCEPT
+  ${EBTABLES} -A ${CHAIN} -i eth$2 -o eth$1 -j ACCEPT
+}
+link_show() {
+  ${EBTABLES} -L ${CHAIN} |grep "\-. $1\ " |grep "\-. $2\ "
+}
+
+#echo "$#"
+if [ $# = 1 ]; then
+	echo $1
+	case "$1" in
+		"--")
+			${EBTABLES} -F ${CHAIN}
+			${EBTABLES} -P ${CHAIN} DROP
+			for i in $(seq 0 10); do 
+				link_up $i $((i+1))
+			done
+			;;
+		"++")
+			${EBTABLES} -F ${CHAIN}
+			${EBTABLES} -P ${CHAIN} DROP
+			for y in $(seq 0 4 11); do
+				for x in $(seq $y $((y+2))); do
+					link_up $x $((x+1))
+				done
+			done
+			for y in $(seq 0 4 7); do
+				for x in $(seq $y $((y+3))); do
+					link_up $x $((x+4))
+				done
+			done
+			;;
+                "c=")
+                        ${EBTABLES} -F ${CHAIN}
+                        ${EBTABLES} -P ${CHAIN} DROP
+                        for y in $(seq 0 4 11); do
+                                for x in $(seq $y $((y+2))); do
+                                        link_up $x $((x+1))
+                                done
+                        done
+			link_up 3 7
+			link_up 4 8
+                        ;;
+
+                "xx")
+                        ${EBTABLES} -F ${CHAIN}
+                        ${EBTABLES} -P ${CHAIN} DROP
+                        # ////
+                        for y in $(seq 0 4 7); do
+                                for x in $(seq $y $((y+2))); do
+                                        link_up $x $((x+5))
+                                done
+                        done
+                        # \\\\
+                        for y in $(seq 0 4 7); do
+                                for x in $(seq $((y+1)) $((y+3))); do
+                                        link_up $x $((x+3))
+                                done
+                        done
+                        ;;
+
+		"x+")
+			${EBTABLES} -F ${CHAIN}
+			${EBTABLES} -P ${CHAIN} DROP
+			# ----
+			for y in $(seq 0 4 11); do
+				for x in $(seq $y $((y+2))); do
+					link_up $x $((x+1))
+				done
+			done
+			# ||||
+			for y in $(seq 0 4 7); do
+				for x in $(seq $y $((y+3))); do
+					link_up $x $((x+4))
+				done
+			done
+			# ////
+			for y in $(seq 0 4 7); do
+				for x in $(seq $y $((y+2))); do
+					link_up $x $((x+5))
+				done
+			done
+			# \\\\
+			for y in $(seq 0 4 7); do
+				for x in $(seq $((y+1)) $((y+3))); do
+					link_up $x $((x+3))
+				done
+			done
+			;;
+		*)
+			usage $0
+			exit
+			;;
+	esac
+	echo "Layout $1 done."
+	exit
+fi
+usage $0

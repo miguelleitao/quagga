@@ -46,6 +46,7 @@ RUN git clone https://github.com/miguelleitao/frr.git frr &&\
 # Target build
 FROM kathara/base
 RUN apt-get update && \
+    apt-get install -y mosquitto-clients && \
     apt-get purge -y quagga && \
     rm -rf /var/lib/apt/lists/*
 RUN addgroup --system --gid 92 frr && \

@@ -7,7 +7,7 @@
 
 default: build
 
-IMG_BASE=miguelleitao/frr-isep
+IMG_BASE=miguelleitao/quagga-isep
 
 include ../Makefile
 
