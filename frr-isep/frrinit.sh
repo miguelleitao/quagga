@@ -18,6 +18,8 @@
 
 export LD_LIBRARY_PATH=/usr/local/lib
 
+ulimit -n 100000
+
 if [ -r "/lib/lsb/init-functions" ]; then
 	. /lib/lsb/init-functions
 else
