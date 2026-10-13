@@ -1,0 +1,5 @@
+#!/bin/sh
+ebtables -P FORWARD ACCEPT
+echo "Bridge '${HOSTNAME}' is UP"
+
+
