@@ -1,7 +1,7 @@
 FROM kathara/frr
 LABEL org.opencontainers.image.authors="Miguel Leitão"
 LABEL org.opencontainers.image.description="FRR router image"
-LABEL org.opencontainers.image.version="1.0"
+LABEL org.opencontainers.image.version="1.1"
 LABEL org.opencontainers.image.source="https://github.com/miguelleitao/quagga"
 RUN apt-get update && \
    apt-get install -y dnsdist knot-dnsutils bind9 bind9utils bind9-doc && \
